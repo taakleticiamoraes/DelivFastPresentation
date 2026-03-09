@@ -17,12 +17,12 @@ public class EstadoPedidoEmProcessamento extends EstadoPedido {
 
     public override void cancelar(Pedido pedido) {
         pedido.setEstado(new EstadoPedidoCancelado());
-        throw new IllegalArgumentException('Pedido cancelado com sucesso.');
+        System.debug('Pedido cancelado com sucesso.');
     }
 
     public override void marcarComoEntregue(Pedido pedido) {
         pedido.setEstado(new EstadoPedidoEntregue());
-        throw new IllegalArgumentException('Pedido marcado como entregue com sucesso.');
+        System.debug('Pedido marcado como entregue com sucesso.');
     }
 
     public override void alterarQuantidade(Pedido pedido, Produto produto, Integer novaQuantidade) {

@@ -10,7 +10,7 @@ public class Dinheiro {
             throw new IllegalArgumentException('O valor do dinheiro não pode ser nulo ou negativo');
         }
 
-        this.valor = valor;
+        this.valor = valor.setScale(2, RoundingMode.HALF_UP);
     }
 
     // ================================================================
@@ -50,4 +50,19 @@ public class Dinheiro {
 
         return new Dinheiro(this.valor * multiplicador);
     }
+
+    // ================================================================
+    // MÉTODOS AUXILIARES
+    // ================================================================
+
+    public Boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Dinheiro)) return false;
+        if (this === obj) return true;
+
+        Dinheiro outro = (Dinheiro) obj;
+
+        return this.valor == outro.valor;
+    }
+
+    public Integer hashCode() {return this.valor.hashCode();}
 }

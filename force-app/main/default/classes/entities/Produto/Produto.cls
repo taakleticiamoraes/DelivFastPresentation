@@ -13,9 +13,6 @@ public class Produto extends EntidadeBase {
         if (String.isBlank(nome)) {
             throw new IllegalArgumentException('O nome do produto não pode ser vazio.');
         }
-        if (precoBase == null) {
-            throw new IllegalArgumentException('O preço base do produto não pode ser nulo.');
-        }
         if (politicaDePreco == null) {
             throw new IllegalArgumentException('A política de preço do produto não pode ser nula.');
         }
@@ -25,5 +22,7 @@ public class Produto extends EntidadeBase {
         this.politicaDePreco = politicaDePreco;
     }
 
-    public Dinheiro preco = politicaDePreco.calcularPreco(this);
+    public Dinheiro calcularPrecoFinal() {
+        return this.politicaDePreco.calcularPreco(this);
+    }
 }

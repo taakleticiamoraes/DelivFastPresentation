@@ -30,8 +30,8 @@ public class Pedido extends EntidadeBase {
         // ------------------------------------------------------------
 
         private Dinheiro calcularSubTotal() {
-            if (this.produto != null && this.produto.preco != null) {
-                return this.produto.preco.multiplicar(this.quantidade);
+            if (this.produto != null) {
+                return this.produto.calcularPrecoFinal().multiplicar(quantidade);
             }
 
             return new Dinheiro(0);
@@ -44,9 +44,10 @@ public class Pedido extends EntidadeBase {
 
     public Cliente cliente {get; private set;}
     public Restaurante restaurante {get; private set;}
-    public List<ItemPedido> itens {get; private set;}
+    public Map<String, ItemPedido> itens {get; private set;}
     public EstadoPedido estado {get; private set;}
     public Dinheiro total {get; private set;}
+    public Dinheiro frete {get; private set;}
 
     public Pedido(Cliente cliente, Restaurante restaurante) {
         if (cliente == null) {
@@ -58,13 +59,18 @@ public class Pedido extends EntidadeBase {
 
         this.cliente = cliente;
         this.restaurante = restaurante;
-        this.itens = new List<ItemPedido>();
+        this.itens = new Map<String, ItemPedido>();
         this.estado = new EstadoPedidoCarrinho();
         this.total = new Dinheiro(0);
+        this.frete = new Dinheiro(0);
     }
 
     public Integer getQuantidadeItens() {
         return this.itens.size();
+    }
+
+    public Dinheiro getTotalCompra() {
+        return this.total.somar(this.frete);
     }
 
     // ================================================================
@@ -113,45 +119,14 @@ public class Pedido extends EntidadeBase {
     // ================================================================
 
     public void adicionarProdutoInterno(Produto produto, Integer quantidade) {
-        if (produto == null) {
-            throw new IllegalArgumentException('O produto a ser adicionado não pode ser nulo.');
-        }
-        if (quantidade == null || quantidade <= 0) {
-            throw new IllegalArgumentException('A quantidade do produto a ser adicionada deve ser maior que zero.');
-        }
+        validarQuantidade(quantidade);
+        validarProdutoRestaurante(produto);
 
-        Boolean produtoExisteNoCardapio = false;
-
-        if (this.restaurante.cardapio != null) {
-            for (Produto p : this.restaurante.cardapio) {
-                if (p.nome != null && produto.nome != null && p.nome.equalsIgnoreCase(produto.nome)) {
-                    produtoExisteNoCardapio = true;
-                    break;
-                }
-            }
-        }
-
-        if (!produtoExisteNoCardapio) {
-            throw new IllegalArgumentException('O produto a ser adicionado não está disponível no cardápio do restaurante.');
-        }
-
-        Integer indiceItemExistente = -1;
-
-        for (Integer i = 0; i < this.itens.size(); i++) {
-            Pedido.ItemPedido item = this.itens[i];
-            if (item.produto.nome != null && produto.nome != null && item.produto.nome.equalsIgnoreCase(produto.nome)) {
-                indiceItemExistente = i;
-                break;
-            }
-        }
-
-        if (indiceItemExistente >= 0) {
-            Pedido.ItemPedido itemExistente = this.itens[indiceItemExistente];
-            this.itens.remove(indiceItemExistente);
-            Pedido.ItemPedido novoItem = new Pedido.ItemPedido(produto, itemExistente.quantidade + quantidade);
-            this.itens.add(novoItem);
+        if (this.itens.containsKey(produto.id)) {
+            this.itens.put(produto.id, new ItemPedido(produto, this.itens.get(produto.id).quantidade + quantidade));
+            System.debug('Quantidade atualizada.');
         } else {
-            this.itens.add(new Pedido.ItemPedido(produto, quantidade));
+            this.itens.put(produto.id, new ItemPedido(produto, quantidade));
         }
 
         System.debug('O seguinte produto foi adicionado: ' + produto.nome + ' (Qtd.: ' + quantidade + ').');
@@ -161,63 +136,27 @@ public class Pedido extends EntidadeBase {
     // ----------------------------------------------------------------
 
     public void removerProdutoInterno(Produto produto) {
-        if (produto == null) {
-            throw new IllegalArgumentException('O produto a ser removido não pode ser nulo.');
-        }
-
-        Integer indiceItemExistente = -1;
-
-        for (Integer i = 0; i < this.itens.size(); i++) {
-            ItemPedido item = this.itens[i];
-            if (item.produto.nome != null && produto.nome != null && item.produto.nome.equalsIgnoreCase(produto.nome)) {
-                indiceItemExistente = i;
-                break;
-            }
-        }
-
-        if (indiceItemExistente >= 0) {
-            this.itens.remove(indiceItemExistente);
+        if (this.itens.containsKey(produto.id)) {
+            this.itens.remove(produto.id);
             System.debug('O seguinte produto foi removido: ' + produto.nome + '.');
             this.recalcularTotalInterno();
         } else {
-            throw new IllegalArgumentException('O produto a ser removido não foi encontrado no pedido.');
+            throw new IllegalArgumentException('O produto não pode ser removido pois não está no pedido.');
         }
     }
 
     // ----------------------------------------------------------------
 
     public void alterarQuantidadeInterno(Produto produto, Integer novaQuantidade) {
-        if (produto == null) {
-            throw new IllegalArgumentException('O produto cuja quantidade será alterada não pode ser nulo.');
-        }
-        if (novaQuantidade == null) {
-            throw new IllegalArgumentException('A nova quantidade do produto deve ser maior que zero.');
-        }
+        if (novaQuantidade <= 0) {removerProduto(produto);}
 
-        Integer indiceItemExistente = -1;
-
-        for (Integer i = 0; i < this.itens.size(); i++) {
-            ItemPedido item = this.itens[i];
-            if (item.produto.nome != null && produto.nome != null && item.produto.nome.equalsIgnoreCase(produto.nome)) {
-                indiceItemExistente = i;
-                break;
-            }
-        }
-
-        if (indiceItemExistente < 0) {
-            throw new IllegalArgumentException('O produto cuja quantidade será alterada não foi encontrado no pedido.');
-        }
-
-        if (novaQuantidade <= 0) {
-            this.itens.remove(indiceItemExistente);
-            System.debug('O seguinte produto foi removido devido à alteração de quantidade para zero ou negativo: ' + produto.nome + '.');
-        } else {
-            this.itens.remove(indiceItemExistente);
-            this.itens.add(new ItemPedido(produto, novaQuantidade));
+        if (this.itens.containsKey(produto.id)) {
+            this.itens.put(produto.id, new ItemPedido(produto, novaQuantidade - this.itens.get(produto.id).quantidade));
             System.debug('A quantidade do produto ' + produto.nome + ' foi alterada para ' + novaQuantidade + '.');
+            this.recalcularTotalInterno();
+        } else {
+            throw new IllegalArgumentException('O produto não pode ser alterado pois não está no pedido');
         }
-
-        this.recalcularTotalInterno();
     }
 
     // ----------------------------------------------------------------
@@ -226,15 +165,20 @@ public class Pedido extends EntidadeBase {
         this.total = new Dinheiro(0);
 
         if (this.itens != null) {
-            for (ItemPedido item : this.itens) {
-                Dinheiro subTotal = item.subTotal;
-                this.total = this.total.somar(subTotal);
+            for (ItemPedido item : this.itens.values()) {
+                this.total = this.total.somar(item.subTotal);
             }
         }
     }
 
+    // ----------------------------------------------------------------
+
+    public void aplicarFrete(Dinheiro frete) {
+        this.frete = frete;
+    }
+
     // ================================================================
-    // MÉTODOS AUXILIARES
+    // MÉTODOS DE VALIDAÇÃO
     // ================================================================
 
     public Boolean todosItensValidos() {
@@ -242,13 +186,45 @@ public class Pedido extends EntidadeBase {
             return false;
         }
 
-        for (ItemPedido item : this.itens) {
+        for (ItemPedido item : this.itens.values()) {
             if (item == null || item.produto == null || item.quantidade == null || item.quantidade <= 0) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    // ----------------------------------------------------------------
+
+    public void validarQuantidade(Integer quantidade) {
+        if (quantidade <= 0) throw new IllegalArgumentException('A quantidade passada é inválida');
+    }
+
+    // ----------------------------------------------------------------
+
+    public void validarRestauranteAtivo() {
+        if (this.restaurante.restauranteAtivo == false) throw new IllegalArgumentException('O restaurante está inativo');
+    }
+
+    // ----------------------------------------------------------------
+
+    public void validarProdutoRestaurante(Produto produto) {
+        if (this.restaurante.buscarProdutos(produto.nome).isEmpty()) {
+            throw new IllegalArgumentException('Produto não encontrado.');
+        }
+    }
+    
+    // ----------------------------------------------------------------
+
+    public void validarTotalBase() {
+        if (this.total.valor < 0) throw new IllegalArgumentException('O total é inválido');
+    }
+
+    // ----------------------------------------------------------------
+
+    public List<ItemPedido> getItens() {
+        return this.itens.values();
     }
 
     // ================================================================
@@ -265,15 +241,17 @@ public class Pedido extends EntidadeBase {
         if (this.itens == null || this.itens.isEmpty()) {
             System.debug('Nenhum item adicionado ao pedido.');
         } else {
-            for (ItemPedido item : this.itens) {
-                String subtotalFormatado = item.subTotal != null ? item.subTotal.toString() : 'R$ 0,00';
-                System.debug('Produto: ' + item.produto.nome + ' | Quantidade: ' + item.quantidade + ' | Subtotal: ' + subtotalFormatado);
+            for (ItemPedido item : this.itens.values()) {
+                String subtotalFormatado = item.subTotal != null ? item.subTotal.valor.toString() : 'R$ 0,00';
+                System.debug('Produto: ' + item.produto.nome + ' - Quantidade: ' + item.quantidade + ' - Subtotal: ' + subtotalFormatado);
             }
         }
 
-        String totalFormatado = this.total != null ? this.total.toString() : 'R$ 0,00';
+        String totalFormatado = this.total.valor != null ? this.total.valor.toString() : 'R$ 0,00';
         System.debug('----------------- TOTAL -----------------');
         System.debug('Total do Pedido: ' + totalFormatado);
+        System.debug('Frete: ' + this.frete.valor);
+        System.debug('Total Final: ' + this.total.somar(this.frete).valor);
         System.debug('=========================================');
     }
 }

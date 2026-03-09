@@ -7,8 +7,9 @@ public class Restaurante extends EntidadeBase {
     public Endereco endereco {get; private set;}
     public CategoriaRestaurante categoria {get; private set;}
     public List<Produto> cardapio {get; private set;}
+    public Boolean restauranteAtivo {get; private set;}
 
-    public Restaurante(String nome, Endereco endereco, CategoriaRestaurante categoria, List<Produto> cardapio) {
+    public Restaurante(String nome, Endereco endereco, CategoriaRestaurante categoria, List<Produto> cardapio, Boolean restauranteAtivo) {
         super();
 
         if (String.isBlank(nome)) {
@@ -25,6 +26,7 @@ public class Restaurante extends EntidadeBase {
         this.endereco = endereco;
         this.categoria = categoria;
         this.cardapio = cardapio;
+        this.restauranteAtivo = restauranteAtivo;
     }
 
     // ================================================================
@@ -46,7 +48,7 @@ public class Restaurante extends EntidadeBase {
         }
 
         this.cardapio.add(produto);
-        String precoFormatado = 'R$ '+ produto.preco;
+        String precoFormatado = 'R$ '+ produto.precoBase;
         System.debug('O produto ' + produto.nome + ' foi adicionado ao cardápio do restaurante ' + this.nome + ' com preço ' + precoFormatado + '.');
     }
 
@@ -61,7 +63,7 @@ public class Restaurante extends EntidadeBase {
         Integer indice = 1;
         System.debug('Cardápio do Restaurante ' + this.nome + ':');
         for (Produto produto : this.cardapio) {
-            String precoFormatado = 'R$ '+ produto.preco;
+            String precoFormatado = 'R$ '+ produto.precoBase.valor;
             System.debug(indice + '. ' + produto.nome + ' - ' + precoFormatado);
             indice++;
         }
@@ -94,7 +96,7 @@ public class Restaurante extends EntidadeBase {
         } else {
             System.debug('Produtos encontrados para o termo de busca "' + termoBusca + '":');
             for (Produto produto : resultados) {
-                String precoFormatado = 'R$ '+ produto.preco;
+                String precoFormatado = 'R$ '+ produto.precoBase.valor;
                 System.debug(indice + '. ' + produto.nome + ' - ' + precoFormatado);
                 indice++;
             }

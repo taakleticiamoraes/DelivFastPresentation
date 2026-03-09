@@ -12,4 +12,19 @@ public class Documento {
 
         this.valor = valor;
     }
+
+    // ================================================================
+    // MÉTODOS AUXILIARES
+    // ================================================================
+
+    public Boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Documento)) return false;
+        if (this === obj) return true;
+
+        Documento outro = (Documento) obj;
+
+        return this.valor == outro.valor;
+    }
+
+    public Integer hashCode() {return this.valor.hashCode();}
 }

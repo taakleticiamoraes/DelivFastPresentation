@@ -3,7 +3,7 @@ public abstract class EntidadeBase {
     // ATRIBUTOS ESTRUTURAIS
     // ================================================================
 
-    public String id {get; private set;}
+    public String id ;
 
     public EntidadeBase() {this.id = UUID.randomUUID().toString();}
 

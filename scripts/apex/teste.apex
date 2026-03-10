@@ -71,6 +71,7 @@ pedidoRoberto1.adicionarProduto(cheeseBurger, 1);
 pedidoRoberto1.adicionarProduto(cheeseSalada, 1);
 pedidoRoberto1.adicionarProduto(cocacola, 2);
 
+
 System.debug(pedidoRoberto1.itens);
 processadorFixo.calcularTotalComFrete(pedidoRoberto1);
 pedidoRoberto1.exibirResumo();
@@ -90,15 +91,26 @@ System.debug(processadorPercentual.politicaDeFrete);
 processadorPercentual.calcularTotalComFrete(pedidoRoberto1);
 pedidoRoberto1.exibirResumo();
 processadorPercentual.alterarQuantidade(pedidoRoberto1, cheeseSalada, 3);
+pedidoRoberto1.exibirResumo();
 
 // ----------------------------------------------------------------
 
-// processadorPercentual.confirmarPedido(pedidoRoberto1);
+ processadorPercentual.confirmarPedido(pedidoRoberto1);
 // processadorPercentual.cancelarPedido(pedidoRoberto1);
-// processadorPercentual.marcarEntrega(pedidoRoberto1);
+ //processadorPercentual.marcarEntrega(pedidoRoberto1);
 // pedidoRoberto1.adicionarProduto(cheeseBurger, 1);
 
 // ----------------------------------------------------------------
+
+
+List<Pedido> pedidosList = new List<Pedido>{pedidoRoberto1};
+List<Documento> cpfs = new List<Documento>{documentoRoberto};
+
+RelatorioVendas.gerarRelatorioProdutosMaisVendidos(pedidosList);
+
+
+
+RelatorioClientes.gerarRelatorioPedidosPorCliente(pedidosList, cpfs);
 
 System.debug('');
 System.debug('======== TESTE TESTE TESTE ========');

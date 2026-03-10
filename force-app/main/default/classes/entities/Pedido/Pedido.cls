@@ -151,7 +151,7 @@ public class Pedido extends EntidadeBase {
         if (novaQuantidade <= 0) {removerProduto(produto);}
 
         if (this.itens.containsKey(produto.id)) {
-            this.itens.put(produto.id, new ItemPedido(produto, novaQuantidade - this.itens.get(produto.id).quantidade));
+            this.itens.put(produto.id, new ItemPedido(produto, novaQuantidade));
             System.debug('A quantidade do produto ' + produto.nome + ' foi alterada para ' + novaQuantidade + '.');
             this.recalcularTotalInterno();
         } else {
@@ -176,6 +176,22 @@ public class Pedido extends EntidadeBase {
     public void aplicarFrete(Dinheiro frete) {
         this.frete = frete;
     }
+
+    // ----------------------------------------------------------------
+
+     public List<ItemWrapper> getItensWrapper(){
+        List<ItemWrapper> itensWrapper = new List<ItemWrapper>();
+        for (ItemPedido item : this.itens.values()) {
+            itensWrapper.add(new ItemWrapper(item.produto, item.quantidade));
+        }
+        return itensWrapper;
+    }
+
+
+    
+
+
+   
 
     // ================================================================
     // MÉTODOS DE VALIDAÇÃO

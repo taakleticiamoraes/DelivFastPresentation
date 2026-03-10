@@ -1,5 +1,5 @@
-# App Delivery Pro
+# Deliv Fast
 
 A solução para entregas!
 
-Projeto desenvolvido por Roberto Sene Azevedo, Estagiário de Desenvolvimento Salesforce no Grupo TAAK, como parte do treinamento da empresa.
+Projeto desenvolvido pelo grupo de Estagiários de Desenvolvimento Salesforce no Grupo TAAK, como parte do treinamento da empresa.

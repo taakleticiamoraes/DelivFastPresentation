@@ -179,19 +179,13 @@ public class Pedido extends EntidadeBase {
 
     // ----------------------------------------------------------------
 
-     public List<ItemWrapper> getItensWrapper(){
+    public List<ItemWrapper> getItensWrapper(){
         List<ItemWrapper> itensWrapper = new List<ItemWrapper>();
         for (ItemPedido item : this.itens.values()) {
             itensWrapper.add(new ItemWrapper(item.produto, item.quantidade));
         }
         return itensWrapper;
     }
-
-
-    
-
-
-   
 
     // ================================================================
     // MÉTODOS DE VALIDAÇÃO

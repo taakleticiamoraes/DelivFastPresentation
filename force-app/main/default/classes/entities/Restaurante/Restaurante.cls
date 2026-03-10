@@ -48,7 +48,7 @@ public class Restaurante extends EntidadeBase {
         }
 
         this.cardapio.add(produto);
-        String precoFormatado = 'R$ '+ produto.precoBase;
+        String precoFormatado = 'R$ ' + produto.precoBase;
         System.debug('O produto ' + produto.nome + ' foi adicionado ao cardápio do restaurante ' + this.nome + ' com preço ' + precoFormatado + '.');
     }
 

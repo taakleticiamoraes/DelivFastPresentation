@@ -97,7 +97,7 @@ pedidoRoberto1.exibirResumo();
 
 processadorPercentual.confirmarPedido(pedidoRoberto1);
 // processadorPercentual.cancelarPedido(pedidoRoberto1);
-//processadorPercentual.marcarEntrega(pedidoRoberto1);
+processadorPercentual.marcarEntrega(pedidoRoberto1);
 // pedidoRoberto1.adicionarProduto(cheeseBurger, 1);
 
 // ----------------------------------------------------------------

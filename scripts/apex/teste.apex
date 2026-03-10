@@ -6,12 +6,15 @@ System.debug('');
 System.debug('======== TESTE TESTE TESTE ========');
 System.debug('');
 
+// ----------------------------------------------------------------
+
 Documento documentoRoberto = new Documento('123.456.789-00');
 Endereco enderecoRoberto = new Endereco('Rua Teste', '123', 'Apt 12', 'São Paulo');
 Endereco enderecoA = new Endereco('Rua Teste', '123', 'São Paulo');
 Cliente clienteRoberto = new Cliente('Roberto', documentoRoberto, enderecoRoberto, '(11) 99999-9999');
 
 System.debug(clienteRoberto.documento.valor);
+System.debug(clienteRoberto.getTipoPessoa());
 
 // ----------------------------------------------------------------
 
@@ -32,6 +35,8 @@ Produto cocacola = new Produto('Coca-Cola', new Dinheiro(5), precoPadrao);
 Produto guarana = new Produto('Guarana', new Dinheiro(5), precoPromocional);
 Produto sprite = new Produto('Sprite', new Dinheiro(5), precoPercentual);
 
+Produto pudim = new Produto('Pudim', new Dinheiro(10), precoPadrao);
+
 // ----------------------------------------------------------------
 
 Endereco enderecoBurger = new Endereco('Avenida Teste', '456', 'Apt 34', 'São Bernardo do Campo');
@@ -40,6 +45,9 @@ Restaurante restauranteBurger = new Restaurante('Burger', enderecoBurger, Catego
 
 restauranteBurger.exibirCardapio();
 restauranteBurger.buscarProdutos('cheese');
+
+restauranteBurger.adicionarProduto(pudim);
+restauranteBurger.exibirCardapio();
 
 // ----------------------------------------------------------------
 
@@ -76,12 +84,22 @@ pedidoRoberto1.exibirResumo();
 
 // ----------------------------------------------------------------
 
-processadorPercentual.confirmarPedido(pedidoRoberto1);
-processadorPercentual.cancelarPedido(pedidoRoberto1);
+processadorPercentual.alterarPolitica(freteGratis);
+System.debug(processadorPercentual.politicaDeFrete);
+
+processadorPercentual.calcularTotalComFrete(pedidoRoberto1);
+pedidoRoberto1.exibirResumo();
+processadorPercentual.alterarQuantidade(pedidoRoberto1, cheeseSalada, 3);
+
+// ----------------------------------------------------------------
+
+// processadorPercentual.confirmarPedido(pedidoRoberto1);
+// processadorPercentual.cancelarPedido(pedidoRoberto1);
 // processadorPercentual.marcarEntrega(pedidoRoberto1);
 // pedidoRoberto1.adicionarProduto(cheeseBurger, 1);
 
 // ----------------------------------------------------------------
+
 System.debug('');
 System.debug('======== TESTE TESTE TESTE ========');
 System.debug('');

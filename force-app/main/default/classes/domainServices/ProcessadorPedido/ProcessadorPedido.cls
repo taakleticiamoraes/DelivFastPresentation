@@ -3,7 +3,7 @@ public class ProcessadorPedido {
     // ATRIBUTOS ESTRUTURAIS
     // ================================================================
 
-    private PoliticaDeFrete politicaDeFrete;
+    public PoliticaDeFrete politicaDeFrete {get; private set;}
 
     public ProcessadorPedido(PoliticaDeFrete politicaDeFrete) {
         if (politicaDeFrete == null) {
@@ -82,19 +82,9 @@ public class ProcessadorPedido {
 
     public void alterarQuantidade(Pedido pedido, Produto produto, Integer novaQuantidade) {
         if (pedido == null) {
-            throw new IllegalArgumentException('O produto a ser modificado .');
+            throw new IllegalArgumentException('O pedido cujo produto a ser modificado não pode ser nulo.');
         }
 
         pedido.alterarQuantidade(produto, novaQuantidade);
-    }
-
-    // ----------------------------------------------------------------
-
-    public void recalcularTotal(Pedido pedido) {
-        if (pedido == null) {
-            throw new IllegalArgumentException('O pedido a ser marcado como entregue não pode ser nulo.');
-        }
-
-        pedido.recalcularTotal();
     }
 }

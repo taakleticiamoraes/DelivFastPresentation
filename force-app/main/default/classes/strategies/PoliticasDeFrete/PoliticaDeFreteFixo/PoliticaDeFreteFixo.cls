@@ -7,7 +7,7 @@ public class PoliticaDeFreteFixo implements PoliticaDeFrete {
 
     public PoliticaDeFreteFixo(Decimal frete) {
         if (frete == null || frete < 0) {
-            throw new IllegalArgumentException('O valor do frete não pode ser nulo ou negativo.');
+            throw new DomainException('O valor do frete não pode ser nulo ou negativo.');
         }
 
         this.frete = frete;

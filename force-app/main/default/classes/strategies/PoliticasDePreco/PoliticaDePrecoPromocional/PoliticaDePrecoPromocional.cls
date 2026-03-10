@@ -11,10 +11,10 @@ public class PoliticaDePrecoPromocional implements PoliticaDePreco {
         if (horaInicioPromocao == null || horaFimPromocao == null ||
             horaInicioPromocao < 0 || horaInicioPromocao > 23 ||
             horaFimPromocao < 0 || horaFimPromocao > 23) {
-            throw new IllegalArgumentException('As horas de início e fim da promoção não podem ser nulas e devem estar entre 0 e 23.');
+            throw new DomainException('As horas de início e fim da promoção não podem ser nulas e devem estar entre 0 e 23.');
         }
         if (percentualDesconto == null || percentualDesconto < 0 || percentualDesconto > 100) {
-            throw new IllegalArgumentException('O percentual de desconto não pode ser nulo e deve estar entre 0 e 100');
+            throw new DomainException('O percentual de desconto não pode ser nulo e deve estar entre 0 e 100');
         }
 
         this.horaInicioPromocao = horaInicioPromocao;

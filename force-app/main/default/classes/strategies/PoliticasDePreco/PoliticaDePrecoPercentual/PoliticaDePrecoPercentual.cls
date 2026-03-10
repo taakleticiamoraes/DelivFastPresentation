@@ -7,7 +7,7 @@ public class PoliticaDePrecoPercentual implements PoliticaDePreco {
 
     public PoliticaDePrecoPercentual(Decimal percentualDesconto) {
         if (percentualDesconto == null || percentualDesconto < 0 || percentualDesconto > 100) {
-            throw new IllegalArgumentException('O percentual de desconto não pode ser nulo e deve estar entre 0 e 100.');
+            throw new DomainException('O percentual de desconto não pode ser nulo e deve estar entre 0 e 100.');
         }
 
         this.percentualDesconto = percentualDesconto;

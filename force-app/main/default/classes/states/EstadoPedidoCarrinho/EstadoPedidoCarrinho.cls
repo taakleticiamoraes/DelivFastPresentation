@@ -13,13 +13,13 @@ public class EstadoPedidoCarrinho extends EstadoPedido {
 
     public override void confirmar(Pedido pedido) {
         if (pedido.getQuantidadeItens() == 0) {
-            throw new IllegalArgumentException('Não é possível confirmar um pedido sem produtos.');
+            throw new DomainException('Não é possível confirmar um pedido sem produtos.');
         }
         if (pedido.total == null || pedido.total.valor <= 0) {
-            throw new IllegalArgumentException('O total do pedido deve ser maior que zero para confirmar.');
+            throw new DomainException('O total do pedido deve ser maior que zero para confirmar.');
         }
         if (!pedido.todosItensValidos()) {
-            throw new IllegalArgumentException('Todos os itens do pedido devem ser válidos para confirmar.');
+            throw new DomainException('Todos os itens do pedido devem ser válidos para confirmar.');
         }
 
         pedido.setEstado(new EstadoPedidoEmProcessamento());
@@ -32,7 +32,7 @@ public class EstadoPedidoCarrinho extends EstadoPedido {
     }
 
     public override void marcarComoEntregue(Pedido pedido) {
-        throw new IllegalArgumentException('Marcar o pedido como entregue não é possível em seu estado atual.');
+        throw new StateException('Marcar o pedido como entregue não é possível em seu estado atual.');
     }
 
     public override void alterarQuantidade(Pedido pedido, Produto produto, Integer novaQuantidade) {

@@ -7,7 +7,7 @@ public class PoliticaDeFretePercentual implements PoliticaDeFrete {
 
     public PoliticaDeFretePercentual(Decimal percentualFrete) {
         if (percentualFrete == null || percentualFrete < 0 || percentualFrete > 100) {
-            throw new IllegalArgumentException('O percentual de frete não pode ser nulo e deve estar entre 0 e 100.');
+            throw new DomainException('O percentual de frete não pode ser nulo e deve estar entre 0 e 100.');
         }
 
         this.percentualFrete = percentualFrete;

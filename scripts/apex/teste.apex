@@ -95,21 +95,17 @@ pedidoRoberto1.exibirResumo();
 
 // ----------------------------------------------------------------
 
- processadorPercentual.confirmarPedido(pedidoRoberto1);
+processadorPercentual.confirmarPedido(pedidoRoberto1);
 // processadorPercentual.cancelarPedido(pedidoRoberto1);
- //processadorPercentual.marcarEntrega(pedidoRoberto1);
+//processadorPercentual.marcarEntrega(pedidoRoberto1);
 // pedidoRoberto1.adicionarProduto(cheeseBurger, 1);
 
 // ----------------------------------------------------------------
-
 
 List<Pedido> pedidosList = new List<Pedido>{pedidoRoberto1};
 List<Documento> cpfs = new List<Documento>{documentoRoberto};
 
 RelatorioVendas.gerarRelatorioProdutosMaisVendidos(pedidosList);
-
-
-
 RelatorioClientes.gerarRelatorioPedidosPorCliente(pedidosList, cpfs);
 
 System.debug('');

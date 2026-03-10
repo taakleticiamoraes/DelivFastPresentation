@@ -17,7 +17,7 @@ public class Pedido extends EntidadeBase {
                 throw new IllegalArgumentException('O produto do item de pedido não pode ser nulo.');
             }
             if (quantidade == null || quantidade <= 0) {
-                throw new IllegalArgumentException('A quantidade do item de pedido deve ser maior que zero.');
+                throw new DomainException('A quantidade do item de pedido deve ser maior que zero.');
             }
 
             this.produto = produto;
@@ -79,7 +79,7 @@ public class Pedido extends EntidadeBase {
 
     public void setEstado(EstadoPedido novoEstado) {
         if (novoEstado == null) {
-            throw new IllegalArgumentException('O novo estado do pedido não pode ser nulo.');
+            throw new StateException('O novo estado do pedido não pode ser nulo.');
         }
         this.estado = novoEstado;
     }
@@ -141,7 +141,7 @@ public class Pedido extends EntidadeBase {
             System.debug('O seguinte produto foi removido: ' + produto.nome + '.');
             this.recalcularTotalInterno();
         } else {
-            throw new IllegalArgumentException('O produto não pode ser removido pois não está no pedido.');
+            throw new DomainException('O produto não pode ser removido pois não está no pedido.');
         }
     }
 
@@ -155,7 +155,7 @@ public class Pedido extends EntidadeBase {
             System.debug('A quantidade do produto ' + produto.nome + ' foi alterada para ' + novaQuantidade + '.');
             this.recalcularTotalInterno();
         } else {
-            throw new IllegalArgumentException('O produto não pode ser alterado pois não está no pedido');
+            throw new DomainException('O produto não pode ser alterado pois não está no pedido');
         }
     }
 
@@ -214,27 +214,27 @@ public class Pedido extends EntidadeBase {
     // ----------------------------------------------------------------
 
     public void validarQuantidade(Integer quantidade) {
-        if (quantidade <= 0) throw new IllegalArgumentException('A quantidade passada é inválida');
+        if (quantidade <= 0) throw new DomainException('A quantidade passada é inválida');
     }
 
     // ----------------------------------------------------------------
 
     public void validarRestauranteAtivo() {
-        if (this.restaurante.restauranteAtivo == false) throw new IllegalArgumentException('O restaurante está inativo');
+        if (this.restaurante.restauranteAtivo == false) throw new DomainException('O restaurante está inativo');
     }
 
     // ----------------------------------------------------------------
 
     public void validarProdutoRestaurante(Produto produto) {
         if (this.restaurante.buscarProdutos(produto.nome).isEmpty()) {
-            throw new IllegalArgumentException('Produto não encontrado.');
+            throw new DomainException('Produto não encontrado.');
         }
     }
     
     // ----------------------------------------------------------------
 
     public void validarTotalBase() {
-        if (this.total.valor < 0) throw new IllegalArgumentException('O total é inválido');
+        if (this.total.valor < 0) throw new DomainException('O total é inválido');
     }
 
     // ----------------------------------------------------------------

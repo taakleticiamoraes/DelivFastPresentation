@@ -43,7 +43,7 @@ public class Restaurante extends EntidadeBase {
 
         for (Produto p : this.cardapio) {
             if (p.nome != null && produto.nome != null && p.nome.equalsIgnoreCase(produto.nome)) {
-                throw new IllegalArgumentException('Já existe um produto com o mesmo nome no cardápio.');
+                throw new DomainException('Já existe um produto com o mesmo nome no cardápio.');
             }
         }
 

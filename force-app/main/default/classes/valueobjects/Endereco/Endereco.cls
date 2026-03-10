@@ -41,10 +41,6 @@ public class Endereco {
         this.complemento = (complemento != null)? complemento : '';
         this.cidade = cidade;
     }
-    
-    // public Endereco(String logradouro, String numero, String complemento, String cidade) {
-    //     this(logradouro, numero, '', cidade);
-    // }
 
     // ================================================================
     // MÉTODOS AUXILIARES

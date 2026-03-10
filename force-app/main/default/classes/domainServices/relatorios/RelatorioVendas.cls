@@ -1,4 +1,7 @@
 public class RelatorioVendas {
+    // ================================================================
+    // RELATÓRIO
+    // ================================================================
 
     public static Map<Produto, Integer> gerarRelatorioProdutosMaisVendidos(List<Pedido> pedidos) {
         Map<Produto, Integer> totalPorProduto = new Map<Produto, Integer>();
@@ -8,11 +11,8 @@ public class RelatorioVendas {
                 
             for (ItemWrapper item : p.getItensWrapper()) {
                 if(!totalPorProduto.containsKey(item.getProduto())) {totalPorProduto.put(item.getProduto(),item.getQuantidade());}
-                
                 else {totalPorProduto.put(item.getProduto(),totalPorProduto.get(item.getProduto()) + item.getQuantidade());}
-                    
             }
-            
         }
         
         List<ItemWrapper> mais_vendidos = gerarRankingDeProdutos(totalPorProduto);
@@ -21,27 +21,19 @@ public class RelatorioVendas {
                           + mais_vendidos[i].getQuantidade() + ' unidades');
         }
 
-        
-
         return totalPorProduto;
     }
 
-    
+    // ----------------------------------------------------------------
 
-      
     public static List<ItemWrapper> gerarRankingDeProdutos(Map<Produto,Integer> totalPorProduto) {
         List<ItemWrapper> ranking = new List<ItemWrapper>();
+
         for (Produto p : totalPorProduto.keySet()) {
             ranking.add(new ItemWrapper(p, totalPorProduto.get(p)));
-
         } 
+
         ranking.sort();
         return ranking;
-        
     }
-   
-
-    
-
-
 }

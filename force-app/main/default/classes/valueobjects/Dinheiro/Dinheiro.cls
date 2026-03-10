@@ -35,7 +35,7 @@ public class Dinheiro {
         Decimal resultado = this.valor - subtracao.valor;
 
         if (resultado < 0) {
-            throw new IllegalArgumentException('O resultado da subtração não pode ser negativo.');
+            throw new DomainException('O resultado da subtração não pode ser negativo.');
         }
 
         return new Dinheiro(resultado);
